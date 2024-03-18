@@ -16,7 +16,7 @@ OUT_FILENAME=mahbook
 OUT_FOLDER=out
 mkdir -p $OUT_FOLDER
 
-for FORMAT in html epub pdf; do
+for FORMAT in html epub pdf serif.pdf; do
     OUT_PATH="${OUT_FOLDER}/${OUT_FILENAME}.${FORMAT}"
 
     EXTRA_ARGS=
@@ -27,6 +27,10 @@ for FORMAT in html epub pdf; do
     if [[ "$FORMAT" == "pdf" ]]; then
         EXTRA_ARGS="--template ./template.tex --number-sections --listings --file-scope"
     fi
+    
+    if [[ "$FORMAT" == "serif.pdf" ]]; then
+        EXTRA_ARGS="--template ./template.tex --variable=fontserif --number-sections --listings --file-scope"
+    fi
 
     if [[ "$FORMAT" == "epub" ]]; then
         EXTRA_ARGS="--epub-title-page=false"
@@ -35,7 +39,6 @@ for FORMAT in html epub pdf; do
     # EPUB EXPORT DOES NOT WORK WITH --file-scope
     docker run --rm -v $(pwd):/data pandoc/extra:edge \
         --from=gfm+rebase_relative_paths+raw_attribute \
-        --to="$FORMAT" \
         --top-level-division=chapter \
         --pdf-engine=xelatex \
         --output=$OUT_PATH \

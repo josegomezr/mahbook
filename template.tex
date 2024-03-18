@@ -652,13 +652,21 @@ $endif$
 \ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
   $if(fontfamily)$
   $else$
-  \usepackage[default,regular,black]{sourceserifpro}
+    $if(fontserif)$
+    \usepackage[default,regular,black]{sourceserifpro}
+    $else$
+    \usepackage[default,regular,black]{sourcesanspro}
+    $endif$
   \usepackage{sourcecodepro}
   $endif$
 \else % if not pdftex
   $if(mainfont)$
   $else$
-  \usepackage[default,regular,black]{sourceserifpro}
+    $if(fontserif)$
+    \usepackage[default,regular,black]{sourceserifpro}
+    $else$
+    \usepackage[default,regular,black]{sourcesanspro}
+    $endif$
   \usepackage{sourcecodepro}
 
   % XeLaTeX specific adjustments for straight quotes: https://tex.stackexchange.com/a/354887
@@ -688,11 +696,23 @@ $endif$
 \definecolor{heading-color}{RGB}{40,40,40}
 $if(beamer)$
 $else$
-\addtokomafont{section}{\rmfamily\color{heading-color}}
+
+\addtokomafont{section}{
+  $if(fontserif)$
+  \rmfamily
+  $endif$
+  \color{heading-color}
+}
 $endif$
 % When using the classes report, scrreprt, book,
 % scrbook or memoir, uncomment the following line.
-\addtokomafont{chapter}{\rmfamily\color{heading-color}}
+
+\addtokomafont{chapter}{
+  $if(fontserif)$
+  \rmfamily
+  $endif$
+  \color{heading-color}
+}
 
 %
 % variables for title, author and date
