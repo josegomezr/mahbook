@@ -16,7 +16,7 @@ OUT_FILENAME=mahbook
 OUT_FOLDER=out
 mkdir -p $OUT_FOLDER
 
-for FORMAT in html epub pdf serif.pdf; do
+for FORMAT in html a5.pdf serif.pdf; do
     OUT_PATH="${OUT_FOLDER}/${OUT_FILENAME}.${FORMAT}"
 
     EXTRA_ARGS=
@@ -26,6 +26,10 @@ for FORMAT in html epub pdf serif.pdf; do
 
     if [[ "$FORMAT" == "pdf" ]]; then
         EXTRA_ARGS="--template ./template.tex --number-sections --listings --file-scope"
+    fi
+
+    if [[ "$FORMAT" == "a5.pdf" ]]; then
+        EXTRA_ARGS="--template ./template.tex --variable=papersize=a5 --number-sections --listings --file-scope"
     fi
     
     if [[ "$FORMAT" == "serif.pdf" ]]; then
