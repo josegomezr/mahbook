@@ -4,19 +4,14 @@ set -e
 
 declare -a FILELIST
 
-FILELIST=$(
-cat <<EOF
-00-metadata.md
-first-chapter.md
-second-chapter.md
-EOF
-)
+FILELIST=$(find chapters/ -type f | sort)
 
 OUT_FILENAME=mahbook
 OUT_FOLDER=out
 mkdir -p $OUT_FOLDER
 
-for FORMAT in html a5.pdf serif.pdf; do
+# for FORMAT in html a5.pdf serif.pdf; do
+for FORMAT in html epub a5.pdf serif.pdf; do
     OUT_PATH="${OUT_FOLDER}/${OUT_FILENAME}.${FORMAT}"
 
     EXTRA_ARGS=
@@ -42,8 +37,9 @@ for FORMAT in html a5.pdf serif.pdf; do
 
     # EPUB EXPORT DOES NOT WORK WITH --file-scope
     docker run --rm -v $(pwd):/data pandoc/extra:edge \
-        --from=gfm+rebase_relative_paths+raw_attribute \
+        --from=markdown+rebase_relative_paths+raw_attribute+smart \
         --top-level-division=chapter \
+        --toc \
         --pdf-engine=xelatex \
         --output=$OUT_PATH \
         $EXTRA_ARGS \
